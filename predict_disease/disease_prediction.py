@@ -26,12 +26,10 @@ class PredictDisease:
         self._data = data
         self._condition = conditions
         self._encoder = LabelEncoder()
-        
         self._data["prognosis"] = self._encoder.fit_transform(self._data["prognosis"])
 
     def model_training(self):
         self._data.dropna(axis=1,inplace=True)
-
         X = self._data.iloc[:,:-1]
         y = self._data.iloc[:, -1]
         # Training the models on whole data
