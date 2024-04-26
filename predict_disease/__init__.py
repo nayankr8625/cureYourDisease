@@ -1,0 +1,1 @@
+from predict_disease.disease_prediction import PredictDisease

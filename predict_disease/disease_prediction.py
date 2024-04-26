@@ -22,7 +22,7 @@ warnings.filterwarnings("ignore", category=UserWarning)
 
 class PredictDisease:
 
-    def __init__(self,conditions,data=pd.read_csv("data/Training.csv")):
+    def __init__(self,conditions,data=pd.read_csv("predict_disease/data/Training.csv")):
         self._data = data
         self._condition = conditions
         self._encoder = LabelEncoder()
@@ -42,9 +42,9 @@ class PredictDisease:
         final_rf_model.fit(X, y)
 
         # Saving Trained models
-        joblib.dump(final_svm_model, 'model_weights/final_svm_model.pkl')
-        joblib.dump(final_nb_model, 'model_weights/final_nb_model.pkl')
-        joblib.dump(final_rf_model, 'model_weights/final_rf_model.pkl')
+        joblib.dump(final_svm_model, 'predict_disease/model_weights/final_svm_model.pkl')
+        joblib.dump(final_nb_model, 'predict_disease/model_weights/final_nb_model.pkl')
+        joblib.dump(final_rf_model, 'predict_disease/model_weights/final_rf_model.pkl')
     
     def process_labels(self):
         self._data.dropna(axis=1,inplace=True)
@@ -55,8 +55,8 @@ class PredictDisease:
         # input symptoms into numerical form
         symptom_index = {}
         for index, value in enumerate(symptoms):
-            symptom = " ".join([i.capitalize() for i in value.split("_")])
-            symptom_index[symptom] = index
+            # symptom = " ".join([i.capitalize() for i in value.split("_")])
+            symptom_index[value] = index
 
         data_dict = {
             "symptom_index": symptom_index,
@@ -65,9 +65,9 @@ class PredictDisease:
         return data_dict
     
     def load_trained_model(self):
-        final_svm_model = joblib.load('model_weights/final_svm_model.pkl')
-        final_nb_model = joblib.load('model_weights/final_nb_model.pkl')
-        final_rf_model = joblib.load('model_weights/final_rf_model.pkl')
+        final_svm_model = joblib.load('predict_disease/model_weights/final_svm_model.pkl')
+        final_nb_model = joblib.load('predict_disease/model_weights/final_nb_model.pkl')
+        final_rf_model = joblib.load('predict_disease/model_weights/final_rf_model.pkl')
 
         return {
             "naive_bayes": final_nb_model,
@@ -113,6 +113,6 @@ class PredictDisease:
 
 
 if __name__=="__main__":
-
-    ob = PredictDisease(conditions="Itching,Skin Rash,Nodal Skin Eruptions")
+    symptomps = ["Mild Fever", "Headache", "Shivering", "Chills"]
+    ob = PredictDisease(conditions='mild_fever, headache, shivering, stomach_pain')
     print(ob.predictDisease())
